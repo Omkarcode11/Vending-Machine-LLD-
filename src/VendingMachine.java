@@ -17,7 +17,7 @@ public class VendingMachine {
     Map<Integer, Integer> money;
 
     public VendingMachine(int id, DispenserService dispenserService, DenominationService denominationService,
-            SelectProductService selectProductService, TransactionService transactionService) {
+            SelectProductService selectProductService) {
         this.id = id;
         this.dispenserService = dispenserService;
         this.denominationService = denominationService;

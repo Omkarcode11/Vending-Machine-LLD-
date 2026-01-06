@@ -93,10 +93,8 @@ public class App {
         dispenser.addProduct(p3);
 
         SelectProductService selectProductService = new SelectProductService(dispenser);
-        TransactionService transactionService = new TransactionService();
 
-        VendingMachine vm = new VendingMachine(1, dispenserService, denominationService, selectProductService,
-                transactionService);
+        VendingMachine vm = new VendingMachine(1, dispenserService, denominationService, selectProductService);
         vm.setState(new IdleState(selectProductService, dispenserService));
 
         return vm;
@@ -180,8 +178,7 @@ public class App {
             DenominationChainService chain = new DenominationChainService(d50);
             DenominationService dns = new DenominationService(chain);
 
-            VendingMachine vm = new VendingMachine(1, ds, dns, new SelectProductService(dispenser),
-                    new TransactionService());
+            VendingMachine vm = new VendingMachine(1, ds, dns, new SelectProductService(dispenser));
             vm.setState(new IdleState(new SelectProductService(dispenser), ds));
 
             vm.selectProduct(101, 1); // Price 15
@@ -366,8 +363,7 @@ public class App {
             dispenser.addProduct(new Product(101, "Coke", 10.0, 10, 10));
             DispenserService ds = new DispenserService(dispenser);
 
-            VendingMachine vm = new VendingMachine(1, ds, dns, new SelectProductService(dispenser),
-                    new TransactionService());
+            VendingMachine vm = new VendingMachine(1, ds, dns, new SelectProductService(dispenser));
             vm.setState(new IdleState(new SelectProductService(dispenser), ds));
 
             vm.selectProduct(101, 1);

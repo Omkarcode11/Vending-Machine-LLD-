@@ -35,30 +35,6 @@ Used in the `DenominationChainService`. Each handler represents a specific denom
 classDiagram
     direction TB
 
-    %% Enums
-    class VendingMachineStatus {
-        <<enumeration>>
-        IDLE
-        INSERT_MONEY
-        PROCESS_TRANSACTION
-        MAINTENANCE
-        OUT_OF_SERVICE
-    }
-
-    class TransactionStatus {
-        <<enumeration>>
-        CREATED
-        PURCHASE
-        FAILED
-        SUCCESS
-    }
-
-    class TransactionType {
-        <<enumeration>>
-        INSERT
-        WITHDRAW
-    }
-
     %% Models
     class Product {
         -int id
