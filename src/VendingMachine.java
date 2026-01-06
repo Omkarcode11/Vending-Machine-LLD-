@@ -30,8 +30,10 @@ public class VendingMachine {
 
     public void selectProduct(int id, int quantity) {
         state.selectProduct(id, quantity);
+    }
+
+    public void confirmInsertMoney() {
         setState(new InsertMoneyState(money));
-        ;
     }
 
     public void setState(VendingMachineState state) {

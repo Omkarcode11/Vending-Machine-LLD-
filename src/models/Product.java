@@ -7,11 +7,12 @@ public class Product {
     private int quantity;
     private int capacity;
 
-    public Product(int id, String name, double price, int quantity) {
+    public Product(int id, String name, double price, int quantity, int capacity) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.quantity = quantity;
+        this.capacity = capacity;
     }
 
     public int getId() {

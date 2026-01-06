@@ -40,8 +40,8 @@ public class DispenserService {
         return dispenser.getProduct(id);
     }
 
-    public void addProduct(int id, String name, double price, int quantity) {
-        Product product = new Product(id, name, price, quantity);
+    public void addProduct(int id, String name, double price, int quantity, int capacity) {
+        Product product = new Product(id, name, price, quantity, capacity);
         dispenser.addProduct(product);
     }
 
