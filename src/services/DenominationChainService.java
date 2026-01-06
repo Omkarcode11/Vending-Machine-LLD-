@@ -17,11 +17,6 @@ public class DenominationChainService {
     }
 
     public boolean canAddMoney(Map<Integer, Integer> money) {
-
-        if (next == null) {
-            return true;
-        }
-
         int value = denomination.getValue();
         int count = denomination.getCount();
 
@@ -29,17 +24,16 @@ public class DenominationChainService {
             if (money.get(value) + count > denomination.getCapacity()) {
                 return false;
             }
-            return next.canAddMoney(money);
+        }
+
+        if (next == null) {
+            return true;
         }
 
         return next.canAddMoney(money);
     }
 
     public boolean addMoney(Map<Integer, Integer> money) {
-        if (next == null) {
-            return true;
-        }
-
         int value = denomination.getValue();
         int count = denomination.getCount();
 
@@ -47,63 +41,72 @@ public class DenominationChainService {
             int needCount = money.get(value);
             if (needCount + count <= denomination.getCapacity()) {
                 denomination.addMoney(needCount);
-                boolean response = next.addMoney(money);
-
-                if (!response) {
-                    denomination.withdrawMoney(needCount);
-                    return false;
-                }
+            } else {
+                return false;
             }
         }
 
-        return next.addMoney(money);
+        if (next == null) {
+            return true;
+        }
+
+        boolean response = next.addMoney(money);
+        if (!response && money.containsKey(value)) {
+            denomination.withdrawMoney(money.get(value));
+        }
+        return response;
     }
 
     public boolean canWithdrawMoney(int amount) {
-        if (next == null) {
-            return amount == 0;
+        if (amount == 0) {
+            return true;
+        }
+
+        if (amount < 0) {
+            return false;
         }
 
         int value = denomination.getValue();
         int count = denomination.getCount();
 
-        if (amount >= value) {
-            int needCount = amount / value;
-            if (needCount <= count) {
-                return next.canWithdrawMoney(amount - (needCount * value));
-            } else {
-                return false;
-            }
+        int takeCount = Math.min(amount / value, count);
+        int remaining = amount - (takeCount * value);
+
+        if (next == null) {
+            return remaining == 0;
         }
 
-        return next.canWithdrawMoney(amount);
+        return next.canWithdrawMoney(remaining);
     }
 
     public boolean withdrawMoney(int amount) {
-        if (next == null) {
-            return amount == 0;
+        if (amount == 0) {
+            return true;
+        }
+
+        if (amount < 0) {
+            return false;
         }
 
         int value = denomination.getValue();
         int count = denomination.getCount();
 
-        if (amount >= value) {
-            int needCount = amount / value;
-            if (needCount <= count) {
-                denomination.withdrawMoney(needCount);
-                boolean response = next.withdrawMoney(amount - (needCount * value));
+        int takeCount = Math.min(amount / value, count);
+        int remaining = amount - (takeCount * value);
 
-                if (!response) {
-                    denomination.addMoney(needCount);
-                    return false;
-                }
-
-            } else {
-                return false;
-            }
+        if (next == null) {
+            return remaining == 0;
         }
 
-        return next.withdrawMoney(amount);
+        denomination.withdrawMoney(takeCount);
+        boolean response = next.withdrawMoney(remaining);
+
+        if (!response) {
+            denomination.addMoney(takeCount);
+            return false;
+        }
+
+        return true;
     }
 
 }

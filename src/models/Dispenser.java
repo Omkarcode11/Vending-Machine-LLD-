@@ -4,9 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Dispenser {
-    Map<Integer,Product> products;
+    Map<Integer, Product> products;
     int id;
-    
+
     public Dispenser(int id) {
         this.id = id;
         this.products = new HashMap<>();
@@ -25,13 +25,14 @@ public class Dispenser {
     }
 
     public boolean isProductAvailable(int id) {
-        return this.products.get(id).isAvailable();
+        Product p = this.products.get(id);
+        return p != null && p.isAvailable();
     }
 
-    public boolean canDispenseProduct(int id, int quantity){
+    public boolean canDispenseProduct(int id, int quantity) {
         Product product = this.getProduct(id);
 
-        if(quantity < 0 || product == null || product.getQuantity() < quantity){
+        if (quantity < 0 || product == null || product.getQuantity() < quantity) {
             return false;
         }
 
@@ -40,15 +41,15 @@ public class Dispenser {
 
     public void dispenseProduct(int id, int quantity) {
         Product product = this.products.get(id);
-        if(product == null || product.canUpdateQuantity(quantity)) {
-            throw new IllegalArgumentException("Product is not available");
+        if (product == null) {
+            throw new IllegalArgumentException("Product not found");
         }
-
-        product.updateQuantity(quantity);
+        // Dispensing reduces quantity, so we pass -quantity
+        product.updateQuantity(-quantity);
     }
 
     public void showProducts() {
-        for(Product product : this.products.values()) {
+        for (Product product : this.products.values()) {
             System.out.println(product.toString());
         }
     }

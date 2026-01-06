@@ -14,12 +14,16 @@ public class SelectProductService {
     }
 
     public void selectProduct(int productId, int quantity) {
-
-        if (!dispenser.canDispenseProduct(productId, quantity)) {
-            System.out.println("Product is not available");
+        if (quantity <= 0) {
+            throw new IllegalArgumentException("Quantity must be greater than 0");
         }
 
-        this.selectedProducts.put(productId, quantity);
+        if (!dispenser.canDispenseProduct(productId, quantity)) {
+            throw new IllegalArgumentException("Product is not available");
+        }
+
+        int currentQuantity = this.selectedProducts.getOrDefault(productId, 0);
+        this.selectedProducts.put(productId, currentQuantity + quantity);
     }
 
     public void clear() {
